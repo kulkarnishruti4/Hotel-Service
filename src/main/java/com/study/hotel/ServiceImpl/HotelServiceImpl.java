@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.study.hotel.Dto.HotelDto;
 import com.study.hotel.Service.HotelService;
 import com.study.hotel.entity.Hotel;
 import com.study.hotel.exception.ResourceNotFoundException;
@@ -17,7 +18,8 @@ public class HotelServiceImpl implements HotelService{
 	private HotelRepository hotelRepo;
 
 	@Override
-	public Hotel saveHotel(Hotel hotel) {
+	public Hotel saveHotel(HotelDto hotelDto) {
+		Hotel hotel = new Hotel(hotelDto.getHotelName(), hotelDto.getLocation(), hotelDto.getAbout(), hotelDto.getRatingId());
 		return hotelRepo.save(hotel);
 	}
 
@@ -27,8 +29,13 @@ public class HotelServiceImpl implements HotelService{
 	}
 
 	@Override
-	public Hotel getHotelById(String id) {
+	public Hotel getHotelById(Long id) {
 		return hotelRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Hotel not found!"));
+	}
+
+	@Override
+	public Hotel getHotelByRatingId(Long ratingId) {
+		return hotelRepo.findByRatingId(ratingId);
 	}
 
 }
